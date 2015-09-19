@@ -16,6 +16,8 @@ Boot.prototype = {
 
     this.game.input.maxPointers = 1;
 
+    this.game.world.setBounds(0, 0, 4000, 1536);
+
     // ARCADE physics
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
 

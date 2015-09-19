@@ -16,13 +16,15 @@ Preload.prototype = {
 
     //load game assets:
     this.load.image('startButton', 'assets/images/start-button.png');
-    // this.load.tilemap('level1', 'assets/tilemaps/testmap.json', null, Phaser.Tilemap.TILED_JSON);
-    // this.load.image('tiles', 'assets/images/testmap.png');
-    // replace bird spritesheet with characters
-
+    this.load.image('background', 'assets/images/background.png');
     this.load.image('ground', 'assets/images/ground.png');
 
-    this.load.spritesheet('bird', 'assets/images/bird.png', 34, 24, 3);
+    this.load.spritesheet('player', 'assets/images/running100x141.png', 100, 141, 6);
+
+    // this.load.tilemap('level1', 'assets/tilemaps/testmap.json', null, Phaser.Tilemap.TILED_JSON);
+    // this.load.image('tiles', 'assets/images/testmap.png');
+
+    this.load.spritesheet('enemy', 'assets/images/enemy.png', 193, 178, 9);
 
 
 

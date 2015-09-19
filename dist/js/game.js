@@ -18,32 +18,6 @@ window.onload = function () {
 },{"./states/boot":4,"./states/gameover":5,"./states/menu":6,"./states/play":7,"./states/preload":8}],2:[function(require,module,exports){
 'use strict';
 
-var Bird = function(game, x, y, frame) {
-  Phaser.Sprite.call(this, game, x, y, 'bird', frame);
-
-  this.anchor.setTo(0.5, 0.5);
-
-  this.animations.add('flap');
-  this.animations.play('flap', 12, true);
-
-  this.game.physics.arcade.enableBody(this);
-
-};
-
-Bird.prototype = Object.create(Phaser.Sprite.prototype);
-Bird.prototype.constructor = Bird;
-
-Bird.prototype.update = function() {
-
-  // write your prefab's specific update code here
-
-};
-
-module.exports = Bird;
-
-},{}],3:[function(require,module,exports){
-'use strict';
-
 var Ground = function(game, x, y, width, height) {
   Phaser.TileSprite.call(this, game, x, y, width, height, 'ground');
 
@@ -66,6 +40,64 @@ Ground.prototype.update = function() {
 
 module.exports = Ground;
 
+},{}],3:[function(require,module,exports){
+'use strict';
+
+var cursors;
+
+var Player = function(game, x, y, frame) {
+  Phaser.Sprite.call(this, game, x, y, 'player', frame);
+
+  this.anchor.setTo(0.5, 0.5);
+
+  this.scale.setTo(0.5, 0.5);
+
+
+  this.animations.add('run');
+  this.animations.play('run', 15, true);
+
+  this.animations.add('left',[0,1,2], 10, true);
+  this.animations.add('right',[3,4,5], 10, true);
+
+  this.game.physics.arcade.enableBody(this);
+
+  this.collideWorldBounds = true;
+  // this.checkWorldBounds = true;
+  // this.outOfBoundsKill = true;
+
+
+};
+
+Player.prototype = Object.create(Phaser.Sprite.prototype);
+Player.prototype.constructor = Player;
+
+Player.prototype.update = function() {
+  cursors = this.game.input.keyboard.createCursorKeys();
+
+  this.body.velocity.x = 0;
+
+  if (cursors.left.isDown) {
+    this.body.velocity.x = -750;
+    this.anchor.setTo(0.5, 0);
+    // this.scale.x = -0.2;
+    this.animations.play('left');
+  } else if (cursors.right.isDown) {
+    // this.scale.x = 0.2;
+    this.body.velocity.x = 750;
+    this.animations.play('right');
+  } else {
+    this.animations.stop();
+    this.frame = 0;
+  }
+  if (cursors.up.isDown && this.body.touching.down){
+    console.log(this.body.touching.down)
+    this.body.velocity.y = -550;
+  }
+
+};
+
+module.exports = Player;
+
 },{}],4:[function(require,module,exports){
 
 'use strict';
@@ -84,6 +116,8 @@ Boot.prototype = {
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
     this.game.input.maxPointers = 1;
+
+    this.game.world.setBounds(0, 0, 4000, 1536);
 
     // ARCADE physics
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -138,6 +172,9 @@ module.exports = GameOver;
 },{}],6:[function(require,module,exports){
 
 'use strict';
+
+var text;
+
 function Menu() {}
 
 Menu.prototype = {
@@ -148,21 +185,31 @@ Menu.prototype = {
 
     //this.background = this.game.add.sprite(0, 0, 'background')
 
-    var text = this.add.text(this.game.width * 0.5, this.game.height * 0.5, 'MENU', {font: '42px Arial', fill: '#fff', align: 'center'});
-    text.anchor.set(0.5, 0.5);
+    var text = this.add.text(this.game.width * 0.5, this.game.height * 0.5, 'YOLO', {font: '42px Arial', fill: '#fff', align: 'center'});
+    text.anchor.set(0.5);
+
+    this.ground = this.game.add.tileSprite(240, 500, 335, 112, 'ground');
+
+    this.ground.autoScroll(-200, 0);
+
 
     this.titleGroup = this.game.add.group();
 
-    this.bird = this.game.add.sprite(-20, 100, 'bird');
-    this.titleGroup.add(this.bird);
-    this.bird.animations.add('flap');
-    this.bird.animations.play('flap', 12, true);
+    this.player = this.game.add.sprite(-40, 90, 'player');
+    this.titleGroup.add(this.player);
+    this.player.animations.add('run');
+    this.player.animations.play('run', 32, true);
+
+    // this.bird = this.game.add.sprite(-20, 100, 'bird');
+    // this.titleGroup.add(this.bird);
+    // this.bird.animations.add('flap');
+    // this.bird.animations.play('flap', 12, true);
 
     this.titleGroup.x = this.game.world.centerX;
     this.titleGroup.y = this.game.world.centerY;
 
     //Oscillate
-    this.game.add.tween(this.titleGroup).to({y:295}, 350, Phaser.Easing.Linear.NONE, true, 0, 1000, true);
+    this.game.add.tween(this.titleGroup).to({y:285}, 350, Phaser.Easing.Linear.NONE, true, 0, 1000, true);
 
     // add our start button with a callback
     //this.game.add.button(x, y, key, callback, callbackContext);
@@ -191,8 +238,11 @@ module.exports = Menu;
 
   'use strict';
 
-  var Bird = require('../prefabs/bird');
+
   var Ground = require('../prefabs/ground');
+  var Player = require('../prefabs/player');
+  var cursors;
+
 
   function Play() {}
   Play.prototype = {
@@ -201,30 +251,39 @@ module.exports = Menu;
 
       this.game.physics.arcade.gravity.y = 500;
 
-      this.bird = new Bird(this.game, 100, this.game.height/2);
-      this.game.add.existing(this.bird);
+      this.background = this.game.add.sprite(0, 0, 'background');
 
-      // this.map = this.game.add.tilemap('level1');
+      this.player = new Player(this.game, 100, 100);
+      this.game.add.existing(this.player);
 
-      //first parameter is the tileset name as specified in Tiled, the second is the key to the asset
-      // this.map.addTilesetImage('tiles', 'tiles');
-
-      //create layer
-      // this.backgroundlayer = this.map.createLayer('BackgroundLayer');
-      // this.blockedLayer = this.map.createLayer('ObjectLayer');
-
-      //collision on blockedLayer
-      // this.map.setCollisionBetween(1, 100000, true, 'blockedLayer');
-
-      //resizes the game world to match the layer dimensions
-      // this.backgroundlayer.resizeWorld();
-
-      this.ground = new Ground(this.game, 0, 400, 335, 112);
+      this.ground = new Ground(this.game, 0, 700, 2000, 112);
       this.game.add.existing(this.ground);
 
+      this.game.camera.follow(this.player);
+
+      // cursors = this.game.input.keyboard.createCursorKeys();
 
     },
     update: function() {
+      console.log('yolo again');
+      console.log(this);
+
+      this.game.physics.enable(this.player);
+
+      this.game.physics.arcade.collide(this.player, this.ground);
+
+      // if (cursors.up.isDown) {
+      //   console.log(this);
+      //   this.game.camera.y -= 4;
+      // } else if (cursors.down.isDown) {
+      //   this.game.camera.y += 4;
+      // }
+      //
+      // if (cursors.left.isDown) {
+      //   this.game.camera.x -= 4;
+      // } else if (cursors.right.isDown) {
+      //   this.game.camera.x += 4;
+      // }
 
     },
     clickListener: function() {
@@ -234,7 +293,7 @@ module.exports = Menu;
 
   module.exports = Play;
 
-},{"../prefabs/bird":2,"../prefabs/ground":3}],8:[function(require,module,exports){
+},{"../prefabs/ground":2,"../prefabs/player":3}],8:[function(require,module,exports){
 
 'use strict';
 function Preload() {
@@ -253,13 +312,15 @@ Preload.prototype = {
 
     //load game assets:
     this.load.image('startButton', 'assets/images/start-button.png');
-    // this.load.tilemap('level1', 'assets/tilemaps/testmap.json', null, Phaser.Tilemap.TILED_JSON);
-    // this.load.image('tiles', 'assets/images/testmap.png');
-    // replace bird spritesheet with characters
-
+    this.load.image('background', 'assets/images/background.png');
     this.load.image('ground', 'assets/images/ground.png');
 
-    this.load.spritesheet('bird', 'assets/images/bird.png', 34, 24, 3);
+    this.load.spritesheet('player', 'assets/images/running100x141.png', 100, 141, 6);
+
+    // this.load.tilemap('level1', 'assets/tilemaps/testmap.json', null, Phaser.Tilemap.TILED_JSON);
+    // this.load.image('tiles', 'assets/images/testmap.png');
+
+    this.load.spritesheet('enemy', 'assets/images/enemy.png', 193, 178, 9);
 
 
 
