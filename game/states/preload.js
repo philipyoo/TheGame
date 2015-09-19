@@ -13,8 +13,9 @@ Preload.prototype = {
     this.asset.anchor.setTo(0.5, 0.5);
     this.load.setPreloadSprite(this.asset);
 
+    //load game assets:
     this.load.image('startButton', 'assets/start-button.png');
-
+    this.load.tilemap('level1', 'assets/map4yolo.json', null, Phaser.Tilemap.TILED_JSON);
     // replace bird spritesheet with characters
     this.load.spritesheet('bird', 'assets/bird.png', 34, 24, 3);
 
