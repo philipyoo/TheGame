@@ -10,6 +10,9 @@ Menu.prototype = {
 
     //this.background = this.game.add.sprite(0, 0, 'background')
 
+    var text = this.add.text(this.game.width * 0.5, this.game.height * 0.5, 'MENU', {font: '42px Arial', fill: '#fff', align: 'center'});
+    text.anchor.set(0.5, 0.5);
+
     this.titleGroup = this.game.add.group();
 
     this.bird = this.game.add.sprite(-20, 100, 'bird');
@@ -34,10 +37,13 @@ Menu.prototype = {
 
 
   },
+  startClick: function() {
+    this.game.state.start('play');
+  },
   update: function() {
-    if(this.game.input.activePointer.justPressed()) {
-      this.game.state.start('play');
-    }
+    // if(this.game.input.activePointer.justPressed()) {
+      // this.game.state.start('play');
+    // }
   }
 };
 
