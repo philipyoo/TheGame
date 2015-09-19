@@ -15,7 +15,90 @@ window.onload = function () {
 
   game.state.start('boot');
 };
-},{"./states/boot":2,"./states/gameover":3,"./states/menu":4,"./states/play":5,"./states/preload":6}],2:[function(require,module,exports){
+},{"./states/boot":4,"./states/gameover":5,"./states/menu":6,"./states/play":7,"./states/preload":8}],2:[function(require,module,exports){
+'use strict';
+
+var Ground = function(game, x, y, width, height) {
+  Phaser.TileSprite.call(this, game, x, y, width, height, 'ground');
+
+  this.game.physics.arcade.enableBody(this);
+  this.physicsType - Phaser.SPRITE;
+
+  this.body.allowGravity = false;
+  this.body.immovable = true;
+
+};
+
+Ground.prototype = Object.create(Phaser.Sprite.prototype);
+Ground.prototype.constructor = Ground;
+
+Ground.prototype.update = function() {
+
+  // write your prefab's specific update code here
+
+};
+
+module.exports = Ground;
+
+},{}],3:[function(require,module,exports){
+'use strict';
+
+var cursors;
+
+var Player = function(game, x, y, frame) {
+  Phaser.Sprite.call(this, game, x, y, 'player', frame);
+
+  this.anchor.setTo(0.5, 0.5);
+
+  this.scale.setTo(0.5, 0.5);
+
+
+  this.animations.add('run');
+  this.animations.play('run', 15, true);
+
+  this.animations.add('left',[0,1,2], 10, true);
+  this.animations.add('right',[3,4,5], 10, true);
+
+  this.game.physics.arcade.enableBody(this);
+
+  this.collideWorldBounds = true;
+  // this.checkWorldBounds = true;
+  // this.outOfBoundsKill = true;
+
+
+};
+
+Player.prototype = Object.create(Phaser.Sprite.prototype);
+Player.prototype.constructor = Player;
+
+Player.prototype.update = function() {
+  cursors = this.game.input.keyboard.createCursorKeys();
+
+  this.body.velocity.x = 0;
+
+  if (cursors.left.isDown) {
+    this.body.velocity.x = -750;
+    this.anchor.setTo(0.5, 0);
+    // this.scale.x = -0.2;
+    this.animations.play('left');
+  } else if (cursors.right.isDown) {
+    // this.scale.x = 0.2;
+    this.body.velocity.x = 750;
+    this.animations.play('right');
+  } else {
+    this.animations.stop();
+    this.frame = 0;
+  }
+  if (cursors.up.isDown && this.body.touching.down){
+    console.log(this.body.touching.down)
+    this.body.velocity.y = -550;
+  }
+
+};
+
+module.exports = Player;
+
+},{}],4:[function(require,module,exports){
 
 'use strict';
 
@@ -31,11 +114,26 @@ Boot.prototype = {
 
     //scaling options
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-    
+
     this.game.input.maxPointers = 1;
+
+    this.game.world.setBounds(0, 0, 4000, 1536);
 
     // ARCADE physics
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
+
+    if (this.game.device.desktop) {
+      this.game.scale.pageAlignHorizontally = true;
+    } else {
+      this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+      this.game.scale.minWidth =  480;
+      this.game.scale.minHeight = 260;
+      this.game.scale.maxWidth = 640;
+      this.game.scale.maxHeight = 480;
+      this.game.scale.forceOrientation(true);
+      this.game.scale.pageAlignHorizontally = true;
+      this.game.scale.setScreenSize(true);
+    }
 
     this.game.state.start('preload');
   }
@@ -43,7 +141,7 @@ Boot.prototype = {
 
 module.exports = Boot;
 
-},{}],3:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 
 'use strict';
 function GameOver() {}
@@ -71,9 +169,12 @@ GameOver.prototype = {
 };
 module.exports = GameOver;
 
-},{}],4:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 
 'use strict';
+
+var text;
+
 function Menu() {}
 
 Menu.prototype = {
@@ -81,56 +182,118 @@ Menu.prototype = {
 
   },
   create: function() {
-    var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
-    this.sprite = this.game.add.sprite(this.game.world.centerX, 138, 'yeoman');
-    this.sprite.anchor.setTo(0.5, 0.5);
 
-    this.titleText = this.game.add.text(this.game.world.centerX, 300, '\'Allo, \'Allo!', style);
-    this.titleText.anchor.setTo(0.5, 0.5);
+    //this.background = this.game.add.sprite(0, 0, 'background')
 
-    this.instructionsText = this.game.add.text(this.game.world.centerX, 400, 'Click anywhere to play "Click The Yeoman Logo"', { font: '16px Arial', fill: '#ffffff', align: 'center'});
-    this.instructionsText.anchor.setTo(0.5, 0.5);
+    var text = this.add.text(this.game.width * 0.5, this.game.height * 0.5, 'YOLO', {font: '42px Arial', fill: '#fff', align: 'center'});
+    text.anchor.set(0.5);
 
-    this.sprite.angle = -20;
-    this.game.add.tween(this.sprite).to({angle: 20}, 1000, Phaser.Easing.Linear.NONE, true, 0, 1000, true);
+    this.ground = this.game.add.tileSprite(240, 500, 335, 112, 'ground');
+
+    this.ground.autoScroll(-200, 0);
+
+
+    this.titleGroup = this.game.add.group();
+
+    this.player = this.game.add.sprite(-40, 90, 'player');
+    this.titleGroup.add(this.player);
+    this.player.animations.add('run');
+    this.player.animations.play('run', 32, true);
+
+    // this.bird = this.game.add.sprite(-20, 100, 'bird');
+    // this.titleGroup.add(this.bird);
+    // this.bird.animations.add('flap');
+    // this.bird.animations.play('flap', 12, true);
+
+    this.titleGroup.x = this.game.world.centerX;
+    this.titleGroup.y = this.game.world.centerY;
+
+    //Oscillate
+    this.game.add.tween(this.titleGroup).to({y:285}, 350, Phaser.Easing.Linear.NONE, true, 0, 1000, true);
+
+    // add our start button with a callback
+    //this.game.add.button(x, y, key, callback, callbackContext);
+    //Every function in Phaser that has a cb also has a cb context parameter. If you fail to pass in the context parameter, Phaser will assume a null context. Generally, you will want to make your cb context `this`, as we want our cb to operate inside of a context that we can access all of our game objects from.
+    this.startButton = this.game.add.button(this.game.width/2, 300, 'startButton', this.startClick, this);
+
+    // this.titleGroup.add(this.startButton);
+
+    this.startButton.anchor.setTo(0.5, 0.5);
+
+
+  },
+  startClick: function() {
+    this.game.state.start('play');
   },
   update: function() {
-    if(this.game.input.activePointer.justPressed()) {
-      this.game.state.start('play');
-    }
+    // if(this.game.input.activePointer.justPressed()) {
+      // this.game.state.start('play');
+    // }
   }
 };
 
 module.exports = Menu;
 
-},{}],5:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 
   'use strict';
+
+
+  var Ground = require('../prefabs/ground');
+  var Player = require('../prefabs/player');
+  var cursors;
+
+
   function Play() {}
   Play.prototype = {
     create: function() {
       this.game.physics.startSystem(Phaser.Physics.ARCADE);
-      this.sprite = this.game.add.sprite(this.game.width/2, this.game.height/2, 'yeoman');
-      this.sprite.inputEnabled = true;
-      
-      this.game.physics.arcade.enable(this.sprite);
-      this.sprite.body.collideWorldBounds = true;
-      this.sprite.body.bounce.setTo(1,1);
-      this.sprite.body.velocity.x = this.game.rnd.integerInRange(-500,500);
-      this.sprite.body.velocity.y = this.game.rnd.integerInRange(-500,500);
 
-      this.sprite.events.onInputDown.add(this.clickListener, this);
+      this.game.physics.arcade.gravity.y = 500;
+
+      this.background = this.game.add.sprite(0, 0, 'background');
+
+      this.player = new Player(this.game, 100, 100);
+      this.game.add.existing(this.player);
+
+      this.ground = new Ground(this.game, 0, 700, 2000, 112);
+      this.game.add.existing(this.ground);
+
+      this.game.camera.follow(this.player);
+
+      // cursors = this.game.input.keyboard.createCursorKeys();
+
     },
     update: function() {
+      console.log('yolo again');
+      console.log(this);
+
+      this.game.physics.enable(this.player);
+
+      this.game.physics.arcade.collide(this.player, this.ground);
+
+      // if (cursors.up.isDown) {
+      //   console.log(this);
+      //   this.game.camera.y -= 4;
+      // } else if (cursors.down.isDown) {
+      //   this.game.camera.y += 4;
+      // }
+      //
+      // if (cursors.left.isDown) {
+      //   this.game.camera.x -= 4;
+      // } else if (cursors.right.isDown) {
+      //   this.game.camera.x += 4;
+      // }
 
     },
     clickListener: function() {
       this.game.state.start('gameover');
     }
   };
-  
+
   module.exports = Play;
-},{}],6:[function(require,module,exports){
+
+},{"../prefabs/ground":2,"../prefabs/player":3}],8:[function(require,module,exports){
 
 'use strict';
 function Preload() {
@@ -143,14 +306,23 @@ Preload.prototype = {
     //boilerplate code. displays animated loading image while loading other assets
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     this.asset = this.add.sprite(this.width/2,this.height/2, 'preloader');
-    this.asset.anchor.setTo(0.5, 0.5);
     this.load.setPreloadSprite(this.asset);
+    // ????
+    this.asset.anchor.setTo(-1, -1);
 
     //load game assets:
-    this.load.image('startButton', 'assets/start-button.png');
-    this.load.tilemap('level1', 'assets/map4yolo.json', null, Phaser.Tilemap.TILED_JSON);
-    // replace bird spritesheet with characters
-    this.load.spritesheet('bird', 'assets/bird.png', 34, 24, 3);
+    this.load.image('startButton', 'assets/images/start-button.png');
+    this.load.image('background', 'assets/images/background.png');
+    this.load.image('ground', 'assets/images/ground.png');
+
+    this.load.spritesheet('player', 'assets/images/running100x141.png', 100, 141, 6);
+
+    // this.load.tilemap('level1', 'assets/tilemaps/testmap.json', null, Phaser.Tilemap.TILED_JSON);
+    // this.load.image('tiles', 'assets/images/testmap.png');
+
+    this.load.spritesheet('enemy', 'assets/images/enemy.png', 193, 178, 9);
+
+
 
   },
   create: function() {
