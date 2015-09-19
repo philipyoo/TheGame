@@ -22,7 +22,7 @@ var Ground = function(game, x, y, width, height) {
   Phaser.TileSprite.call(this, game, x, y, width, height, 'ground');
 
   this.game.physics.arcade.enableBody(this);
-  this.physicsType - Phaser.SPRITE;
+  this.physicsType = Phaser.SPRITE;
 
   this.body.allowGravity = false;
   this.body.immovable = true;
@@ -45,8 +45,8 @@ module.exports = Ground;
 
 var cursors;
 
-var Player = function(game, x, y, frame) {
-  Phaser.Sprite.call(this, game, x, y, 'player', frame);
+var Player = function(game, x, y, playerName, controllable, frame) {
+  Phaser.Sprite.call(this, game, x, y, playerName, controllable, frame);
 
   this.anchor.setTo(0.5, 0.5);
 
@@ -61,10 +61,15 @@ var Player = function(game, x, y, frame) {
 
   this.game.physics.arcade.enableBody(this);
 
-  this.collideWorldBounds = true;
+  this.body.collideWorldBounds = true;
   // this.checkWorldBounds = true;
   // this.outOfBoundsKill = true;
 
+  if (!controllable) {
+    this.update = function() {
+      return;
+    }
+  };
 
 };
 
@@ -253,39 +258,31 @@ module.exports = Menu;
 
       this.background = this.game.add.sprite(0, 0, 'background');
 
-      this.player = new Player(this.game, 100, 100);
-      this.game.add.existing(this.player);
 
-      this.ground = new Ground(this.game, 0, 700, 2000, 112);
-      this.game.add.existing(this.ground);
+      this.player1 = new Player(this.game, 100, 100, 'player1', true);
+      this.game.add.existing(this.player1);
 
-      this.game.camera.follow(this.player);
+
+      //movement for these are the same because of same keystrokes
+      this.player2 = new Player(this.game, 200, 100, 'player2', false);
+      this.game.add.existing(this.player2);
+
+      // this.ground = new Ground(this.game, 0, 700, 2000, 112);
+      // this.game.add.existing(this.ground);
+
+      this.game.camera.follow(this.player1);
 
       // cursors = this.game.input.keyboard.createCursorKeys();
 
     },
     update: function() {
-      console.log('yolo again');
-      console.log(this);
+      
+      this.game.physics.enable(this.player1);
 
-      this.game.physics.enable(this.player);
-
-      this.game.physics.arcade.collide(this.player, this.ground);
-
-      // if (cursors.up.isDown) {
-      //   console.log(this);
-      //   this.game.camera.y -= 4;
-      // } else if (cursors.down.isDown) {
-      //   this.game.camera.y += 4;
-      // }
-      //
-      // if (cursors.left.isDown) {
-      //   this.game.camera.x -= 4;
-      // } else if (cursors.right.isDown) {
-      //   this.game.camera.x += 4;
-      // }
+      this.game.physics.arcade.collide(this.player1, this.ground);
 
     },
+
     clickListener: function() {
       this.game.state.start('gameover');
     }
