@@ -27,7 +27,16 @@ Boot.prototype = {
     this.load.image('preloader', 'assets/preloader.gif');
   },
   create: function() {
+    this.game.stage.backgroundColor = '#fff';
+
+    //scaling options
+    this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    
     this.game.input.maxPointers = 1;
+
+    // ARCADE physics
+    this.game.physics.startSystem(Phaser.Physics.ARCADE);
+
     this.game.state.start('preload');
   }
 };
@@ -131,12 +140,16 @@ function Preload() {
 
 Preload.prototype = {
   preload: function() {
+    this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     this.asset = this.add.sprite(this.width/2,this.height/2, 'preloader');
     this.asset.anchor.setTo(0.5, 0.5);
-
-    this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     this.load.setPreloadSprite(this.asset);
-    this.load.image('yeoman', 'assets/yeoman-logo.png');
+
+    // Ground vs Background??
+    this.load.image('ground', 'assets/map4yolo.png');
+
+    // replace bird spritesheet with characters
+    this.load.spritesheet('bird', 'assets/bird.png', 34, 24, 3);
 
   },
   create: function() {
