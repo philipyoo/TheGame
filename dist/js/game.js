@@ -73,11 +73,6 @@ Bullet.prototype.update = function(){
 
   }
 
-  //Bullet.prototype.update = function fire() {
-
-
-
-
   module.exports = Bullet;
 
 },{}],3:[function(require,module,exports){
@@ -87,13 +82,7 @@ var Ground = function(game, x, y, width, height) {
   Phaser.TileSprite.call(this, game, x, y, width, height, 'ground');
 
   this.game.physics.arcade.enableBody(this);
-<<<<<<< HEAD
-
-
-  this.physicsType - Phaser.SPRITE;
-=======
   this.physicsType = Phaser.SPRITE;
->>>>>>> 1ed330963f2e0504ec81fe0b296197fb097de33e
 
   this.body.allowGravity = false;
   this.body.immovable = true;
@@ -133,11 +122,6 @@ var Player = function(game, x, y, playerName, controllable, frame) {
   //this.animations.add('jump',[], 10, true);
   //this.animations.add('shoot'[] 10, true);
 
-<<<<<<< HEAD
-=======
-  this.game.physics.arcade.enableBody(this);
-
->>>>>>> 1ed330963f2e0504ec81fe0b296197fb097de33e
   this.body.collideWorldBounds = true;
   // this.checkWorldBounds = true;
   // this.outOfBoundsKill = true;
@@ -336,21 +320,21 @@ module.exports = Menu;
 
       this.background = this.game.add.sprite(0, 0, 'background');
 
-<<<<<<< HEAD
       this.player = new Player(this.game, 0, 2000);
+
       this.bullet = new Bullet(this.game, this.player.x, this.player.y, this.player);
       this.game.add.existing(this.player);
-      this.game.add.existing(this.bullet);
-=======
 
-      this.player1 = new Player(this.game, 100, 100, 'player1', true);
+
+      this.player1 = new Player(this.game, 100, 100, 'player', true);
+      this.bullet1 = new Bullet(this.game, this.player1.x, this.player1.y, this.player1);
       this.game.add.existing(this.player1);
-
+      this.game.add.existing(this.bullet1);
 
       //movement for these are the same because of same keystrokes
-      this.player2 = new Player(this.game, 200, 100, 'player2', false);
+      this.player2 = new Player(this.game, 200, 100, 'player', false);
+
       this.game.add.existing(this.player2);
->>>>>>> 1ed330963f2e0504ec81fe0b296197fb097de33e
 
       // this.ground = new Ground(this.game, 0, 700, 2000, 112);
       // this.game.add.existing(this.ground);
@@ -361,29 +345,10 @@ module.exports = Menu;
 
     },
     update: function() {
-<<<<<<< HEAD
 
-      this.game.physics.enable(this.player);
-      this.game.physics.arcade.collide(this.player, this.ground);
-
-      // if (cursors.up.isDown) {
-      //   console.log(this);
-      //   this.game.camera.y -= 4;
-      // } else if (cursors.down.isDown) {
-      //   this.game.camera.y += 4;
-      // }
-      //
-      // if (cursors.left.isDown) {
-      //   this.game.camera.x -= 4;
-      // } else if (cursors.right.isDown) {
-      //   this.game.camera.x += 4;
-      // }
-=======
-      
       this.game.physics.enable(this.player1);
 
       this.game.physics.arcade.collide(this.player1, this.ground);
->>>>>>> 1ed330963f2e0504ec81fe0b296197fb097de33e
 
     },
 
@@ -415,7 +380,7 @@ Preload.prototype = {
     this.load.image('startButton', 'assets/images/start-button.png');
     this.load.image('background', 'assets/images/background.png');
     this.load.image('ground', 'assets/images/ground.png');
-    this.load.image('bullet', 'assets/images/bird.png');
+    this.load.spritesheet('bullet', 'assets/images/bird.png', 34, 24, 1);
 
     this.load.spritesheet('player', 'assets/images/running100x141.png', 100, 141, 6);
 
@@ -423,9 +388,6 @@ Preload.prototype = {
     // this.load.image('tiles', 'assets/images/testmap.png');
 
     this.load.spritesheet('enemy', 'assets/images/enemy.png', 193, 178, 9);
-
-
-
   },
   create: function() {
     this.asset.cropEnabled = false;

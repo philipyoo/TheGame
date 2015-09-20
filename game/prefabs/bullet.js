@@ -55,9 +55,4 @@ Bullet.prototype.update = function(){
 
   }
 
-  //Bullet.prototype.update = function fire() {
-
-
-
-
   module.exports = Bullet;

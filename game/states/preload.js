@@ -18,7 +18,7 @@ Preload.prototype = {
     this.load.image('startButton', 'assets/images/start-button.png');
     this.load.image('background', 'assets/images/background.png');
     this.load.image('ground', 'assets/images/ground.png');
-    this.load.image('bullet', 'assets/images/bird.png');
+    this.load.spritesheet('bullet', 'assets/images/bird.png', 34, 24, 1);
 
     this.load.spritesheet('player', 'assets/images/running100x141.png', 100, 141, 6);
 
@@ -26,9 +26,6 @@ Preload.prototype = {
     // this.load.image('tiles', 'assets/images/testmap.png');
 
     this.load.spritesheet('enemy', 'assets/images/enemy.png', 193, 178, 9);
-
-
-
   },
   create: function() {
     this.asset.cropEnabled = false;

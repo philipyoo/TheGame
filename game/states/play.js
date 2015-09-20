@@ -17,20 +17,20 @@
 
       this.background = this.game.add.sprite(0, 0, 'background');
 
-<<<<<<< HEAD
       this.player = new Player(this.game, 0, 2000);
+
       this.bullet = new Bullet(this.game, this.player.x, this.player.y, this.player);
       this.game.add.existing(this.player);
-      this.game.add.existing(this.bullet);
-=======
 
-      this.player1 = new Player(this.game, 100, 100, 'player1', true);
+
+      this.player1 = new Player(this.game, 100, 100, 'player', true);
+      this.bullet1 = new Bullet(this.game, this.player1.x, this.player1.y, this.player1);
       this.game.add.existing(this.player1);
->>>>>>> 1ed330963f2e0504ec81fe0b296197fb097de33e
-
+      this.game.add.existing(this.bullet1);
 
       //movement for these are the same because of same keystrokes
-      this.player2 = new Player(this.game, 200, 100, 'player2', false);
+      this.player2 = new Player(this.game, 200, 100, 'player', false);
+
       this.game.add.existing(this.player2);
 
       // this.ground = new Ground(this.game, 0, 700, 2000, 112);
@@ -42,29 +42,10 @@
 
     },
     update: function() {
-<<<<<<< HEAD
 
-      this.game.physics.enable(this.player);
-      this.game.physics.arcade.collide(this.player, this.ground);
-
-      // if (cursors.up.isDown) {
-      //   console.log(this);
-      //   this.game.camera.y -= 4;
-      // } else if (cursors.down.isDown) {
-      //   this.game.camera.y += 4;
-      // }
-      //
-      // if (cursors.left.isDown) {
-      //   this.game.camera.x -= 4;
-      // } else if (cursors.right.isDown) {
-      //   this.game.camera.x += 4;
-      // }
-=======
-      
       this.game.physics.enable(this.player1);
 
       this.game.physics.arcade.collide(this.player1, this.ground);
->>>>>>> 1ed330963f2e0504ec81fe0b296197fb097de33e
 
     },
 
