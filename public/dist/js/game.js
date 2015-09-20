@@ -23,16 +23,15 @@ window.onload = function () {
 
     socket.emit('new user', $username.val(), function(data){
       if(data){
-        console.log("Welcome back" + $username.val())
+        console.log("Welcome back")
         $userForm.hide();
         $gameWrap.show();
         socket.emit("play", {data:"Play~"});
       } else{
-        $userError.html($username.val()+ ' is already tabke, try again')
+        $userError.html( 'Username is already tabke, try again')
         $gameWrap.hide();
       }
     });
-
     $username.val('')
   });
 
