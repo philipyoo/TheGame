@@ -5,7 +5,7 @@ var cursors;
 var Player = function(game, x, y, spritesheet, controllable, frame) {
   Phaser.Sprite.call(this, game, x, y, spritesheet, controllable, frame);
 
- this.game.physics.arcade.enableBody(this);
+  this.game.physics.arcade.enableBody(this);
 
  this.enableBody = true;
  this.game.physics.enable(this, Phaser.Physics.ARCADE)
@@ -24,8 +24,6 @@ var Player = function(game, x, y, spritesheet, controllable, frame) {
   //this.animations.add('shoot'[] 10, true);
 
   this.body.collideWorldBounds = true;
-  // this.checkWorldBounds = true;
-  // this.outOfBoundsKill = true;
 
   if (!controllable) {
     this.update = function() {

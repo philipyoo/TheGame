@@ -14,7 +14,6 @@
 
       this.game.physics.arcade.gravity.y = 500;
 
-
       this.background = this.game.add.sprite(0, 0, 'background');
 
       //Create Playe(this.game.world.height)
@@ -34,16 +33,20 @@
 
       this.ground = new Ground(this.game, 0, 700, 2000, 112);
       this.game.add.existing(this.ground);
-      this.game.camera.follow(this.player1);
 
-      // cursors = this.game.input.keyboard.createCursorKeys();
+      this.game.camera.follow(this.player1);
 
     },
     update: function() {
 
-
       this.game.physics.arcade.overlap(this.bullet1.bullets, this.player2,  this.collisionHandler, null, this);
+
+      this.game.physics.arcade.collide(this.player1, this.ground);
+      this.game.physics.arcade.collide(this.player2, this.ground);
     },
+
+
+
 
     collisionHandler: function(bullet, opponent){
       bullet.kill();

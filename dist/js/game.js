@@ -37,7 +37,6 @@ var Bullet = function(game, x, y, spritesheet, player) {
 
     this.bullets.createMultiple(20, 'bullet');
     //this.bullets.setAll('anchor.x', -0.5);
-    //this.bullets.setAll('anchor.y', -0.5);
     this.bullets.setAll('checkWorldBounds', true);
     this.bullets.setAll('outOfBoundsKill', true);
 
@@ -82,14 +81,15 @@ var Ground = function(game, x, y, width, height) {
   this.body.allowGravity = false;
   this.body.immovable = true;
 
+  // this.game.physics.arcade.OVERLAP_BIAS = 30;
+  // this.game.physics.arcade.TILE_BIAS = 1000;
+
 };
 
 Ground.prototype = Object.create(Phaser.Sprite.prototype);
 Ground.prototype.constructor = Ground;
 
 Ground.prototype.update = function() {
-
-  this.game.physics.enable([this], Phaser.Physics.ARCADE);
 
 };
 
@@ -103,7 +103,7 @@ var cursors;
 var Player = function(game, x, y, spritesheet, controllable, frame) {
   Phaser.Sprite.call(this, game, x, y, spritesheet, controllable, frame);
 
- this.game.physics.arcade.enableBody(this);
+  this.game.physics.arcade.enableBody(this);
 
  this.enableBody = true;
  this.game.physics.enable(this, Phaser.Physics.ARCADE)
@@ -122,8 +122,6 @@ var Player = function(game, x, y, spritesheet, controllable, frame) {
   //this.animations.add('shoot'[] 10, true);
 
   this.body.collideWorldBounds = true;
-  // this.checkWorldBounds = true;
-  // this.outOfBoundsKill = true;
 
   if (!controllable) {
     this.update = function() {
@@ -315,7 +313,6 @@ module.exports = Menu;
 
       this.game.physics.arcade.gravity.y = 500;
 
-
       this.background = this.game.add.sprite(0, 0, 'background');
 
       //Create Playe(this.game.world.height)
@@ -335,16 +332,20 @@ module.exports = Menu;
 
       this.ground = new Ground(this.game, 0, 700, 2000, 112);
       this.game.add.existing(this.ground);
-      this.game.camera.follow(this.player1);
 
-      // cursors = this.game.input.keyboard.createCursorKeys();
+      this.game.camera.follow(this.player1);
 
     },
     update: function() {
 
-
       this.game.physics.arcade.overlap(this.bullet1.bullets, this.player2,  this.collisionHandler, null, this);
+
+      this.game.physics.arcade.collide(this.player1, this.ground);
+      this.game.physics.arcade.collide(this.player2, this.ground);
     },
+
+
+
 
     collisionHandler: function(bullet, opponent){
       bullet.kill();

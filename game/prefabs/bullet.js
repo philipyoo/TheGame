@@ -19,7 +19,6 @@ var Bullet = function(game, x, y, spritesheet, player) {
 
     this.bullets.createMultiple(20, 'bullet');
     //this.bullets.setAll('anchor.x', -0.5);
-    //this.bullets.setAll('anchor.y', -0.5);
     this.bullets.setAll('checkWorldBounds', true);
     this.bullets.setAll('outOfBoundsKill', true);
 
