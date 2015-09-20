@@ -24,8 +24,8 @@ var fireRate = 100;
 var nextFire = 0;
 
 
-var Bullet = function(game, x, y, player) {
-  Phaser.Sprite.call(this, game, x, y, 'bullet');
+var Bullet = function(game, x, y, spritesheet, player) {
+  Phaser.Sprite.call(this, game, x, y, spritesheet, player);
 
   //this.game.physics.startSystem(Phaser.Physics.ARCADE);
    this.player = player
@@ -35,16 +35,11 @@ var Bullet = function(game, x, y, player) {
     this.bullets.enableBody = true;
     this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
 
-    this.bullets.createMultiple(50, 'bullet');
+    this.bullets.createMultiple(20, 'bullet');
+    //this.bullets.setAll('anchor.x', -0.5);
+    //this.bullets.setAll('anchor.y', -0.5);
     this.bullets.setAll('checkWorldBounds', true);
     this.bullets.setAll('outOfBoundsKill', true);
-
-    game.physics.enable(player, Phaser.Physics.ARCADE);
-
-    player.body.allowRotation = false;
-
-
-
 
     this.body.collideWorldBounds = true;
 };
@@ -63,11 +58,11 @@ Bullet.prototype.update = function(){
        {
           nextFire = this.game.time.now + fireRate;
 
-          var bullet = this.bullets.getFirstDead();
+          var bullet = this.bullets.getFirstDead(false);
 
           bullet.reset(this.player.x, this.player.y);
 
-          this.game.physics.arcade.moveToPointer(bullet, 3000);
+          this.game.physics.arcade.moveToPointer(bullet, 1000);
        }
     };
 
@@ -94,7 +89,7 @@ Ground.prototype.constructor = Ground;
 
 Ground.prototype.update = function() {
 
-  // write your prefab's specific update code here
+  this.game.physics.enable([this], Phaser.Physics.ARCADE);
 
 };
 
@@ -105,10 +100,14 @@ module.exports = Ground;
 
 var cursors;
 
-var Player = function(game, x, y, playerName, controllable, frame) {
-  Phaser.Sprite.call(this, game, x, y, playerName, controllable, frame);
+var Player = function(game, x, y, spritesheet, controllable, frame) {
+  Phaser.Sprite.call(this, game, x, y, spritesheet, controllable, frame);
 
  this.game.physics.arcade.enableBody(this);
+
+ this.enableBody = true;
+ this.game.physics.enable(this, Phaser.Physics.ARCADE)
+
 
   this.anchor.setTo(0.5, 0.5);
 
@@ -139,7 +138,6 @@ Player.prototype.constructor = Player;
 
 Player.prototype.update = function() {
   cursors = this.game.input.keyboard.createCursorKeys();
-
   this.body.velocity.x = 0;
 
   if (cursors.left.isDown) {
@@ -310,7 +308,6 @@ module.exports = Menu;
   var Bullet = require('../prefabs/bullet');
   var cursors;
 
-
   function Play() {}
   Play.prototype = {
     create: function() {
@@ -318,44 +315,49 @@ module.exports = Menu;
 
       this.game.physics.arcade.gravity.y = 500;
 
+
       this.background = this.game.add.sprite(0, 0, 'background');
 
-      this.player = new Player(this.game, 0, 2000);
+      //Create Playe(this.game.world.height)
+      this.player1 = new Player(this.game, this.game.world.width*-1, this.game.world.height*-1, 'player', true);
+      this.player2 = new Player(this.game, this.game.world.width/2, this.game.world.height/2, 'yeoman', false);
 
-      this.bullet = new Bullet(this.game, this.player.x, this.player.y, this.player);
-      this.game.add.existing(this.player);
+      //Create weapons for Players
+     this.bullet1 = new Bullet(this.game, this.player1.x, this.player1.y, 'bullet', this.player1);
+     //this.bullet2 = new Bullet(this.game, this.player2.x, this.player2.y, 'bullet', this.player2);
 
-
-      this.player1 = new Player(this.game, 100, 100, 'player', true);
-      this.bullet1 = new Bullet(this.game, this.player1.x, this.player1.y, this.player1);
+      //Add players and weapons to game
       this.game.add.existing(this.player1);
-      this.game.add.existing(this.bullet1);
-
-      //movement for these are the same because of same keystrokes
-      this.player2 = new Player(this.game, 200, 100, 'player', false);
-
       this.game.add.existing(this.player2);
+      //this.game.add.existing(this.bullet2);
+
+      this.game.add.existing(this.bullet1);
 
       // this.ground = new Ground(this.game, 0, 700, 2000, 112);
       // this.game.add.existing(this.ground);
-
       this.game.camera.follow(this.player1);
 
       // cursors = this.game.input.keyboard.createCursorKeys();
 
     },
     update: function() {
+      console.log(this.bullet1.bullets);
+      console.log(this.player2)
 
-      this.game.physics.enable(this.player1);
+      this.game.physics.arcade.overlap(this.bullet1.bullets, this.player2,  this.collisionHandler, null, this);
+    },
 
-      this.game.physics.arcade.collide(this.player1, this.ground);
-
+    collisionHandler: function(bullet, opponent){
+      bullet.kill();
+      opponent.kill()
     },
 
     clickListener: function() {
       this.game.state.start('gameover');
     }
-  };
+
+};
+
 
   module.exports = Play;
 
@@ -381,6 +383,7 @@ Preload.prototype = {
     this.load.image('background', 'assets/images/background.png');
     this.load.image('ground', 'assets/images/ground.png');
     this.load.spritesheet('bullet', 'assets/images/bird.png', 34, 24, 1);
+    this.load.image('yeoman', 'assets/yeoman-logo.png')
 
     this.load.spritesheet('player', 'assets/images/running100x141.png', 100, 141, 6);
 

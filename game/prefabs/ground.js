@@ -16,7 +16,7 @@ Ground.prototype.constructor = Ground;
 
 Ground.prototype.update = function() {
 
-  // write your prefab's specific update code here
+  this.game.physics.enable([this], Phaser.Physics.ARCADE);
 
 };
 

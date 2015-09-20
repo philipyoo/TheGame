@@ -19,6 +19,7 @@ Preload.prototype = {
     this.load.image('background', 'assets/images/background.png');
     this.load.image('ground', 'assets/images/ground.png');
     this.load.spritesheet('bullet', 'assets/images/bird.png', 34, 24, 1);
+    this.load.image('yeoman', 'assets/yeoman-logo.png')
 
     this.load.spritesheet('player', 'assets/images/running100x141.png', 100, 141, 6);
 
