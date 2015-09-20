@@ -81,6 +81,9 @@ var Ground = function(game, x, y, width, height) {
   this.body.allowGravity = false;
   this.body.immovable = true;
 
+  this.width = width;
+  this.height = height;
+
   // this.game.physics.arcade.OVERLAP_BIAS = 30;
   // this.game.physics.arcade.TILE_BIAS = 1000;
 
@@ -330,7 +333,8 @@ module.exports = Menu;
 
       this.game.add.existing(this.bullet1);
 
-      this.ground = new Ground(this.game, 0, 700, 2000, 112);
+
+      this.ground = new Ground(this.game, 0, 1322, 4000, 214);
       this.game.add.existing(this.ground);
 
       this.game.camera.follow(this.player1);
