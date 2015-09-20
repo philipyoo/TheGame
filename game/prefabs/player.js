@@ -5,7 +5,7 @@ var cursors;
 var Player = function(game, x, y, playerName, controllable, frame) {
   Phaser.Sprite.call(this, game, x, y, playerName, controllable, frame);
 
- this.game.physics.arcade.enableBody(this);
+  this.game.physics.arcade.enableBody(this);
 
   this.anchor.setTo(0.5, 0.5);
 
@@ -41,7 +41,7 @@ Player.prototype.update = function() {
 
   if (cursors.left.isDown) {
     this.body.velocity.x = -750;
-    this.anchor.setTo(0.5, 0);
+    // this.anchor.setTo(0.5, 0);
     this.scale.x = -0.5;
     this.animations.play('left');
   } else if (cursors.right.isDown) {
