@@ -4,6 +4,10 @@ var express = require('express'),
     logger = require('morgan'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
+    config = require('./oauth.js'),
+    passport = require('passport'),
+    FacebookStrategy = require('passport-facebook').Strategy,
+    GoogleStrategy = require('passport-google').Strategy,
 
     routes = require('./routes/index'),
 
@@ -23,12 +27,12 @@ mongoose.connect('mongodb://localhost/dagame', function(err){
 });
 
 var Schema = mongoose.Schema
-var UserSchema = new Schema({
+var userSchema = new Schema({
   username: String,
   password: String,
   created: {type: Date, default: Date.now}
 });
-var User = mongoose.model('User', UserSchema);
+var User = mongoose.model('User', userSchema);
 
 
 // Server Connection

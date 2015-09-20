@@ -21,7 +21,7 @@ window.onload = function () {
   $userForm.submit(function(event){
     event.preventDefault();
 
-    socket.emit('new user', $username.val(), function(data){
+    socket.emit('new user', {username:$username.val(), password:$password.val()}, function(data){
       if(data){
         console.log("Welcome back")
         $userForm.hide();
