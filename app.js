@@ -13,6 +13,36 @@ var app = express();
 
 server.listen(4000);
 
+io.sockets.on("connection", function(socket){
+  console.log("socket connected");
+
+  socket.on("play", function(data){
+    console.log(data.data)
+  });
+
+  socket.on("update", function(data){
+    console.log(data.data)
+  });
+
+  socket.on("click", function(data){
+    console.log(data.data)
+  });
+
+  socket.on("left", function(data){
+    console.log(data.data)
+  });
+
+  socket.on("right", function(data){
+    console.log(data.data)
+  });
+
+  socket.on("bullet", function(data){
+    console.log(data.data)
+  });
+
+});
+
+
 
 
 

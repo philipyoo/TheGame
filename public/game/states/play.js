@@ -8,7 +8,10 @@
   var cursors;
 
 
+
+
   function Play() {}
+
   Play.prototype = {
     create: function() {
       this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -16,12 +19,6 @@
       this.game.physics.arcade.gravity.y = 500;
 
       this.background = this.game.add.sprite(0, 0, 'background');
-
-      this.player = new Player(this.game, 0, 2000);
-
-      this.bullet = new Bullet(this.game, this.player.x, this.player.y, this.player);
-      this.game.add.existing(this.player);
-
 
       this.player1 = new Player(this.game, 100, 100, 'player', true);
       this.bullet1 = new Bullet(this.game, this.player1.x, this.player1.y, this.player1);
@@ -44,7 +41,6 @@
     update: function() {
 
       this.game.physics.enable(this.player1);
-
       this.game.physics.arcade.collide(this.player1, this.ground);
 
     },
