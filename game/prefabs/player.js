@@ -2,10 +2,14 @@
 
 var cursors;
 
-var Player = function(game, x, y, playerName, controllable, frame) {
-  Phaser.Sprite.call(this, game, x, y, playerName, controllable, frame);
+var Player = function(game, x, y, spritesheet, controllable, frame) {
+  Phaser.Sprite.call(this, game, x, y, spritesheet, controllable, frame);
 
   this.game.physics.arcade.enableBody(this);
+
+ this.enableBody = true;
+ this.game.physics.enable(this, Phaser.Physics.ARCADE)
+
 
   this.anchor.setTo(0.5, 0.5);
 
@@ -20,8 +24,6 @@ var Player = function(game, x, y, playerName, controllable, frame) {
   //this.animations.add('shoot'[] 10, true);
 
   this.body.collideWorldBounds = true;
-  // this.checkWorldBounds = true;
-  // this.outOfBoundsKill = true;
 
   if (!controllable) {
     this.update = function() {
@@ -36,12 +38,11 @@ Player.prototype.constructor = Player;
 
 Player.prototype.update = function() {
   cursors = this.game.input.keyboard.createCursorKeys();
-
   this.body.velocity.x = 0;
 
   if (cursors.left.isDown) {
     this.body.velocity.x = -750;
-    // this.anchor.setTo(0.5, 0);
+    //this.anchor.setTo(0.5, 0);
     this.scale.x = -0.5;
     this.animations.play('left');
   } else if (cursors.right.isDown) {

@@ -6,8 +6,8 @@ var fireRate = 100;
 var nextFire = 0;
 
 
-var Bullet = function(game, x, y, player) {
-  Phaser.Sprite.call(this, game, x, y, 'bullet');
+var Bullet = function(game, x, y, spritesheet, player) {
+  Phaser.Sprite.call(this, game, x, y, spritesheet, player);
 
   //this.game.physics.startSystem(Phaser.Physics.ARCADE);
    this.player = player
@@ -17,16 +17,10 @@ var Bullet = function(game, x, y, player) {
     this.bullets.enableBody = true;
     this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
 
-    this.bullets.createMultiple(50, 'bullet');
+    this.bullets.createMultiple(20, 'bullet');
+    //this.bullets.setAll('anchor.x', -0.5);
     this.bullets.setAll('checkWorldBounds', true);
     this.bullets.setAll('outOfBoundsKill', true);
-
-    game.physics.enable(player, Phaser.Physics.ARCADE);
-
-    player.body.allowRotation = false;
-
-
-
 
     this.body.collideWorldBounds = true;
 };
@@ -45,11 +39,11 @@ Bullet.prototype.update = function(){
        {
           nextFire = this.game.time.now + fireRate;
 
-          var bullet = this.bullets.getFirstDead();
+          var bullet = this.bullets.getFirstDead(false);
 
           bullet.reset(this.player.x, this.player.y);
 
-          this.game.physics.arcade.moveToPointer(bullet, 3000);
+          this.game.physics.arcade.moveToPointer(bullet, 1000);
        }
     };
 
