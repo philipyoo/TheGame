@@ -31,7 +31,8 @@
 
       this.game.add.existing(this.bullet1);
 
-      this.ground = new Ground(this.game, 0, 700, 2000, 112);
+
+      this.ground = new Ground(this.game, 0, 1322, 4000, 214);
       this.game.add.existing(this.ground);
 
       this.game.camera.follow(this.player1);

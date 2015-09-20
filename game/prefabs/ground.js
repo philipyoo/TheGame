@@ -9,6 +9,9 @@ var Ground = function(game, x, y, width, height) {
   this.body.allowGravity = false;
   this.body.immovable = true;
 
+  this.width = width;
+  this.height = height;
+
   // this.game.physics.arcade.OVERLAP_BIAS = 30;
   // this.game.physics.arcade.TILE_BIAS = 1000;
 
