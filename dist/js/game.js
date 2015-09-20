@@ -87,6 +87,9 @@ var Ground = function(game, x, y, width, height) {
   this.body.allowGravity = false;
   this.body.immovable = true;
 
+  // this.game.physics.arcade.OVERLAP_BIAS = 30;
+  // this.game.physics.arcade.TILE_BIAS = 1000;
+
 };
 
 Ground.prototype = Object.create(Phaser.Sprite.prototype);
@@ -108,7 +111,7 @@ var cursors;
 var Player = function(game, x, y, playerName, controllable, frame) {
   Phaser.Sprite.call(this, game, x, y, playerName, controllable, frame);
 
- this.game.physics.arcade.enableBody(this);
+  this.game.physics.arcade.enableBody(this);
 
   this.anchor.setTo(0.5, 0.5);
 
@@ -144,7 +147,7 @@ Player.prototype.update = function() {
 
   if (cursors.left.isDown) {
     this.body.velocity.x = -750;
-    this.anchor.setTo(0.5, 0);
+    // this.anchor.setTo(0.5, 0);
     this.scale.x = -0.5;
     this.animations.play('left');
   } else if (cursors.right.isDown) {
@@ -336,8 +339,8 @@ module.exports = Menu;
 
       this.game.add.existing(this.player2);
 
-      // this.ground = new Ground(this.game, 0, 700, 2000, 112);
-      // this.game.add.existing(this.ground);
+      this.ground = new Ground(this.game, 0, 700, 2000, 112);
+      this.game.add.existing(this.ground);
 
       this.game.camera.follow(this.player1);
 
