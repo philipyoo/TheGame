@@ -8,6 +8,12 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 
 var app = express();
+    server = require('http').createServer(app),
+    io = require('socket.io').listen(server);
+
+server.listen(4000);
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
