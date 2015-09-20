@@ -18,6 +18,7 @@ Preload.prototype = {
     this.load.image('startButton', 'assets/images/start-button.png');
     this.load.image('background', 'assets/images/background.png');
     this.load.image('ground', 'assets/images/ground.png');
+    this.load.image('bullet', 'assets/images/bird.png');
 
     this.load.spritesheet('player', 'assets/images/running100x141.png', 100, 141, 6);
 

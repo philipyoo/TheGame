@@ -15,13 +15,80 @@ window.onload = function () {
 
   game.state.start('boot');
 };
-},{"./states/boot":4,"./states/gameover":5,"./states/menu":6,"./states/play":7,"./states/preload":8}],2:[function(require,module,exports){
+},{"./states/boot":5,"./states/gameover":6,"./states/menu":7,"./states/play":8,"./states/preload":9}],2:[function(require,module,exports){
+'use strict';
+
+var bullets;
+
+var fireRate = 100;
+var nextFire = 0;
+
+
+var Bullet = function(game, x, y, player) {
+  Phaser.Sprite.call(this, game, x, y, 'bullet');
+
+  //this.game.physics.startSystem(Phaser.Physics.ARCADE);
+   this.player = player
+   this.game.physics.arcade.enableBody(this);
+
+    this.bullets = this.game.add.group();
+    this.bullets.enableBody = true;
+    this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
+
+    this.bullets.createMultiple(50, 'bullet');
+    this.bullets.setAll('checkWorldBounds', true);
+    this.bullets.setAll('outOfBoundsKill', true);
+
+    game.physics.enable(player, Phaser.Physics.ARCADE);
+
+    player.body.allowRotation = false;
+
+
+
+
+    this.body.collideWorldBounds = true;
+};
+
+Bullet.prototype = Object.create(Phaser.Sprite.prototype);
+Bullet.prototype.constructor = Bullet;
+
+Bullet.prototype.update = function(){
+    //player.rotation = this.game.physics.arcade.angleToPointer(player);
+    // this.bullets.x = player.x;
+    // this.bullets.y = player.y;
+
+    if (this.game.input.activePointer.isDown)
+    {
+      if (this.game.time.now > nextFire && this.bullets.countDead() > 0)
+       {
+          nextFire = this.game.time.now + fireRate;
+
+          var bullet = this.bullets.getFirstDead();
+
+          bullet.reset(this.player.x, this.player.y);
+
+          this.game.physics.arcade.moveToPointer(bullet, 3000);
+       }
+    };
+
+  }
+
+  //Bullet.prototype.update = function fire() {
+
+
+
+
+  module.exports = Bullet;
+
+},{}],3:[function(require,module,exports){
 'use strict';
 
 var Ground = function(game, x, y, width, height) {
   Phaser.TileSprite.call(this, game, x, y, width, height, 'ground');
 
   this.game.physics.arcade.enableBody(this);
+
+
   this.physicsType - Phaser.SPRITE;
 
   this.body.allowGravity = false;
@@ -40,7 +107,7 @@ Ground.prototype.update = function() {
 
 module.exports = Ground;
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 'use strict';
 
 var cursors;
@@ -48,20 +115,21 @@ var cursors;
 var Player = function(game, x, y, frame) {
   Phaser.Sprite.call(this, game, x, y, 'player', frame);
 
+ this.game.physics.arcade.enableBody(this);
+
   this.anchor.setTo(0.5, 0.5);
 
   this.scale.setTo(0.5, 0.5);
-
 
   this.animations.add('run');
   this.animations.play('run', 15, true);
 
   this.animations.add('left',[0,1,2], 10, true);
   this.animations.add('right',[3,4,5], 10, true);
+  //this.animations.add('jump',[], 10, true);
+  //this.animations.add('shoot'[] 10, true);
 
-  this.game.physics.arcade.enableBody(this);
-
-  this.collideWorldBounds = true;
+  this.body.collideWorldBounds = true;
   // this.checkWorldBounds = true;
   // this.outOfBoundsKill = true;
 
@@ -79,10 +147,10 @@ Player.prototype.update = function() {
   if (cursors.left.isDown) {
     this.body.velocity.x = -750;
     this.anchor.setTo(0.5, 0);
-    // this.scale.x = -0.2;
+    this.scale.x = -0.5;
     this.animations.play('left');
   } else if (cursors.right.isDown) {
-    // this.scale.x = 0.2;
+    this.scale.x = 0.5;
     this.body.velocity.x = 750;
     this.animations.play('right');
   } else {
@@ -98,7 +166,7 @@ Player.prototype.update = function() {
 
 module.exports = Player;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 
 'use strict';
 
@@ -141,7 +209,7 @@ Boot.prototype = {
 
 module.exports = Boot;
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 
 'use strict';
 function GameOver() {}
@@ -169,7 +237,7 @@ GameOver.prototype = {
 };
 module.exports = GameOver;
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 
 'use strict';
 
@@ -234,13 +302,14 @@ Menu.prototype = {
 
 module.exports = Menu;
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 
   'use strict';
 
 
   var Ground = require('../prefabs/ground');
   var Player = require('../prefabs/player');
+  var Bullet = require('../prefabs/bullet');
   var cursors;
 
 
@@ -253,11 +322,10 @@ module.exports = Menu;
 
       this.background = this.game.add.sprite(0, 0, 'background');
 
-      this.player = new Player(this.game, 100, 100);
+      this.player = new Player(this.game, 0, 2000);
+      this.bullet = new Bullet(this.game, this.player.x, this.player.y, this.player);
       this.game.add.existing(this.player);
-
-      this.ground = new Ground(this.game, 0, 700, 2000, 112);
-      this.game.add.existing(this.ground);
+      this.game.add.existing(this.bullet);
 
       this.game.camera.follow(this.player);
 
@@ -265,11 +333,8 @@ module.exports = Menu;
 
     },
     update: function() {
-      console.log('yolo again');
-      console.log(this);
 
       this.game.physics.enable(this.player);
-
       this.game.physics.arcade.collide(this.player, this.ground);
 
       // if (cursors.up.isDown) {
@@ -293,7 +358,7 @@ module.exports = Menu;
 
   module.exports = Play;
 
-},{"../prefabs/ground":2,"../prefabs/player":3}],8:[function(require,module,exports){
+},{"../prefabs/bullet":2,"../prefabs/ground":3,"../prefabs/player":4}],9:[function(require,module,exports){
 
 'use strict';
 function Preload() {
@@ -314,6 +379,7 @@ Preload.prototype = {
     this.load.image('startButton', 'assets/images/start-button.png');
     this.load.image('background', 'assets/images/background.png');
     this.load.image('ground', 'assets/images/ground.png');
+    this.load.image('bullet', 'assets/images/bird.png');
 
     this.load.spritesheet('player', 'assets/images/running100x141.png', 100, 141, 6);
 

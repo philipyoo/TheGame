@@ -4,6 +4,8 @@ var Ground = function(game, x, y, width, height) {
   Phaser.TileSprite.call(this, game, x, y, width, height, 'ground');
 
   this.game.physics.arcade.enableBody(this);
+
+
   this.physicsType - Phaser.SPRITE;
 
   this.body.allowGravity = false;
