@@ -1,20 +1,41 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+var express = require('express'),
+    path = require('path'),
+    favicon = require('serve-favicon'),
+    logger = require('morgan'),
+    cookieParser = require('cookie-parser'),
+    bodyParser = require('body-parser'),
 
-var routes = require('./routes/index');
+    routes = require('./routes/index'),
 
-var app = express();
+    app = express(),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server),
+    mongoose = require('mongoose'),
     usernames = [];
 
+// Mongoose Schema Implementation
+mongoose.connect('mongodb://localhost/dagame', function(err){
+  if(err){
+    console.log(err);
+  } else{
+    console.log("Connected to mongodb")
+  }
+});
+
+var Schema = mongoose.Schema
+var UserSchema = new Schema({
+  username: String,
+  password: String,
+  created: {type: Date, default: Date.now}
+});
+var User = mongoose.model('User', UserSchema);
+
+
+// Server Connection
 server.listen(4000);
 
 
+// Sockets
 io.sockets.on("connection", function(socket){
 
   socket.on('new user', function(data, callback){
