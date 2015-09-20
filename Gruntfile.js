@@ -12,11 +12,11 @@ var lrSnippet = require('connect-livereload')({port: LIVERELOAD_PORT});
 var mountFolder = function (connect, dir) {
   return connect.static(require('path').resolve(dir));
 };
- 
+
 module.exports = function (grunt) {
   // load all grunt tasks
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
- 
+
   grunt.initConfig({
     watch: {
       scripts: {
@@ -33,7 +33,7 @@ module.exports = function (grunt) {
     },
     connect: {
       options: {
-        port: 9000,
+        port: 3000,
         // change this to '0.0.0.0' to access the server from outside
         hostname: 'localhost'
       },
@@ -50,7 +50,7 @@ module.exports = function (grunt) {
     },
     open: {
       server: {
-        path: 'http://localhost:9000'
+        path: 'http://localhost:3000'
       }
     },
     copy: {
@@ -72,7 +72,7 @@ module.exports = function (grunt) {
       }
     }
   });
-  
+
   grunt.registerTask('build', ['buildBootstrapper', 'browserify','copy']);
   grunt.registerTask('serve', ['build', 'connect:livereload', 'open', 'watch']);
   grunt.registerTask('default', ['serve']);
