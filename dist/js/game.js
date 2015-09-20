@@ -323,8 +323,6 @@ module.exports = Menu;
 
       this.background = this.game.add.sprite(0, 0, 'background');
 
-      this.player = new Player(this.game, 0, 2000);
-
       this.bullet = new Bullet(this.game, this.player.x, this.player.y, this.player);
       this.game.add.existing(this.player);
 
@@ -344,14 +342,11 @@ module.exports = Menu;
 
       this.game.camera.follow(this.player1);
 
-      // cursors = this.game.input.keyboard.createCursorKeys();
-
     },
     update: function() {
 
-      this.game.physics.enable(this.player1);
-
       this.game.physics.arcade.collide(this.player1, this.ground);
+      this.game.physics.arcade.collide(this.player2, this.ground);
 
     },
 
