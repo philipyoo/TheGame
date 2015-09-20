@@ -142,7 +142,7 @@ Player.prototype.update = function() {
 
   if (cursors.left.isDown) {
     this.body.velocity.x = -750;
-    this.anchor.setTo(0.5, 0);
+    //this.anchor.setTo(0.5, 0);
     this.scale.x = -0.5;
     this.animations.play('left');
   } else if (cursors.right.isDown) {
@@ -333,16 +333,15 @@ module.exports = Menu;
 
       this.game.add.existing(this.bullet1);
 
-      // this.ground = new Ground(this.game, 0, 700, 2000, 112);
-      // this.game.add.existing(this.ground);
+      this.ground = new Ground(this.game, 0, 700, 2000, 112);
+      this.game.add.existing(this.ground);
       this.game.camera.follow(this.player1);
 
       // cursors = this.game.input.keyboard.createCursorKeys();
 
     },
     update: function() {
-      console.log(this.bullet1.bullets);
-      console.log(this.player2)
+
 
       this.game.physics.arcade.overlap(this.bullet1.bullets, this.player2,  this.collisionHandler, null, this);
     },

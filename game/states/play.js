@@ -32,16 +32,15 @@
 
       this.game.add.existing(this.bullet1);
 
-      // this.ground = new Ground(this.game, 0, 700, 2000, 112);
-      // this.game.add.existing(this.ground);
+      this.ground = new Ground(this.game, 0, 700, 2000, 112);
+      this.game.add.existing(this.ground);
       this.game.camera.follow(this.player1);
 
       // cursors = this.game.input.keyboard.createCursorKeys();
 
     },
     update: function() {
-      console.log(this.bullet1.bullets);
-      console.log(this.player2)
+
 
       this.game.physics.arcade.overlap(this.bullet1.bullets, this.player2,  this.collisionHandler, null, this);
     },

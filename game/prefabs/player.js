@@ -44,7 +44,7 @@ Player.prototype.update = function() {
 
   if (cursors.left.isDown) {
     this.body.velocity.x = -750;
-    this.anchor.setTo(0.5, 0);
+    //this.anchor.setTo(0.5, 0);
     this.scale.x = -0.5;
     this.animations.play('left');
   } else if (cursors.right.isDown) {
