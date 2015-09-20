@@ -9,18 +9,31 @@ var routes = require('./routes/index');
 
 var app = express();
     server = require('http').createServer(app),
-    io = require('socket.io').listen(server);
+    io = require('socket.io').listen(server),
+    usernames = [];
 
 server.listen(4000);
 
+
 io.sockets.on("connection", function(socket){
-  console.log("socket connected");
+
+  socket.on('new user', function(data, callback){
+    if(usernames.indexOf(data) != -1){
+      callback(false);
+    } else{
+      callback(true);
+      socket.username = data;
+      usernames.push(socket.username);
+      updateUsernames();
+    }
+  })
+
+  function updateUsernames(){
+    io.sockets.emit('usernames', usernames);
+  }
+
 
   socket.on("play", function(data){
-    console.log(data.data)
-  });
-
-  socket.on("update", function(data){
     console.log(data.data)
   });
 
@@ -39,6 +52,13 @@ io.sockets.on("connection", function(socket){
   socket.on("bullet", function(data){
     console.log(data.data)
   });
+
+  socket.on("disconnect", function(data){
+    if(!socket.username) return;
+
+    usernames.splice(usernames.indexOf(socket.username), 1);
+    updateUsernames();
+  })
 
 });
 

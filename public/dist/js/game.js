@@ -1,13 +1,49 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
+
+
+
 var socket = io.connect();
+var $userForm = $('#userForm');
+var $username = $('#username');
+var $userList = $('#userList');
+var $gameWrap = $('#gameWrap');
+var $userError = $('#userError');
+
+
+
 //global variables
 window.onload = function () {
+  $gameWrap.hide();
   var game = new Phaser.Game(800, 600, Phaser.AUTO, 'thegame');
 
 
-  socket.emit("play", {data:"this is data"});
-  socket.emit("update", {data:"update data"});
+  $userForm.submit(function(event){
+    event.preventDefault();
+
+    socket.emit('new user', $username.val(), function(data){
+      if(data){
+        console.log("Welcome back" + $username.val())
+        $userForm.hide();
+        $gameWrap.show();
+        socket.emit("play", {data:"Play~"});
+      } else{
+        $userError.html($username.val()+ ' is already tabke, try again')
+        $gameWrap.hide();
+      }
+    });
+
+    $username.val('')
+  });
+
+  socket.on('usernames', function(data){
+    var userlist='';
+    for(var i=0; i< data.length; i++){
+      userlist+= data[i] + '<br/>'
+    }
+    $userList.html(userlist);
+  });
+
 
   // Game States
   game.state.add('boot', require('./states/boot'));

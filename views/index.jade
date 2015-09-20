@@ -1,4 +1,11 @@
 extends layout
 
 block content
-  #thegame
+  #gameWrap
+    #thegame
+    #userList
+  form(id="userForm", method="post")
+    p Enter a username:
+    #userError
+    input(id="username")
+    input(type="submit")
