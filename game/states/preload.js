@@ -20,8 +20,12 @@ Preload.prototype = {
     this.load.image('ground', 'assets/images/ground.png');
     this.load.spritesheet('bullet', 'assets/images/bird.png', 34, 24, 1);
     this.load.image('yeoman', 'assets/yeoman-logo.png')
+
     this.load.spritesheet('kaboom', 'assets/images/explode.png', 128, 128);
     this.load.spritesheet('explosion', 'assets/images/explosion1.png', 200, 141, 11);
+
+    this.load.image('platform', 'assets/images/platform.png')
+
     this.load.spritesheet('player', 'assets/images/running100x141.png', 100, 141, 6);
 
     // this.load.tilemap('level1', 'assets/tilemaps/testmap.json', null, Phaser.Tilemap.TILED_JSON);
