@@ -125,6 +125,9 @@ var Ground = function(game, x, y, width, height) {
   this.body.allowGravity = false;
   this.body.immovable = true;
 
+  this.width = width;
+  this.height = height;
+
   // this.game.physics.arcade.OVERLAP_BIAS = 30;
   // this.game.physics.arcade.TILE_BIAS = 1000;
 
@@ -376,6 +379,10 @@ module.exports = Menu;
 
       this.game.add.existing(this.bullet1);
 
+
+      this.ground = new Ground(this.game, 0, 1322, 4000, 214);
+      this.game.add.existing(this.ground);
+
       this.game.camera.follow(this.player1);
 
 
@@ -389,10 +396,7 @@ module.exports = Menu;
       //console.log(flame.animations);
          // sprite: function (x, y, key, frame, group) {
 
-
       this.blow = this.flame.animations.add('blow');
-
-
 
 
     },
@@ -415,7 +419,7 @@ module.exports = Menu;
      //var explosion = this.explosion.explosions.getFirstExists(false);
       this.flame.reset(opponent.body.x, opponent.body.y-100);
       console.log(this.flame.animations.play);
-      this.flame.animations.play('blow', 30, false, true)
+      this.flame.animations.play('blow', 30, false, true);
      //console.log(explosion.play)
      // explosion.play('explosion', 30, true, false);
     },
