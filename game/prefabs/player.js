@@ -1,14 +1,15 @@
 'use strict';
 
 var cursors;
+var jumpKey;
 
 var Player = function(game, x, y, spritesheet, controllable, frame) {
   Phaser.Sprite.call(this, game, x, y, spritesheet, controllable, frame);
 
   this.game.physics.arcade.enableBody(this);
 
- this.enableBody = true;
- this.game.physics.enable(this, Phaser.Physics.ARCADE)
+  this.enableBody = true;
+  this.game.physics.enable(this, Phaser.Physics.ARCADE)
 
 
   this.anchor.setTo(0.5, 0.5);
@@ -37,8 +38,18 @@ Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function() {
+
+  this.game.physics.startSystem(Phaser.Physics.ARCADE);
+
+  this.game.physics.arcade.gravity.y = 1000;
+
   cursors = this.game.input.keyboard.createCursorKeys();
+  var jumpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.UP);
+  // keyUp = game.input.keyboard.addKey(Phaser.Keyboard.UP);
+  // cursors = this.game.input.keyboard.addKey(Phaser.Keyboard)
+  // jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.UP);
   this.body.velocity.x = 0;
+  this.body.velocity.y = 0;
 
   if (cursors.left.isDown) {
     this.body.velocity.x = -750;
@@ -49,15 +60,27 @@ Player.prototype.update = function() {
     this.scale.x = 0.5;
     this.body.velocity.x = 750;
     this.animations.play('right');
-  } else {
-    this.animations.stop();
-    this.frame = 0;
-  }
-  if (cursors.up.isDown && this.body.touching.down){
-    console.log(this.body.touching.down)
-    this.body.velocity.y = -550;
+  // } else {
+  //   this.animations.stop();
+  //   this.frame = 0;
   }
 
+  if (jumpKey.isDown) {
+    this.body.velocity.y = -200;
+  }
+
+  // if (cursors.up.isDown && this.body.touching.down){
+  //   // console.log(this);
+  //   // console.log(this.body.touching.down);
+  //   this.body.velocity.y = -1550;
+  // }
+
+  // if (Phaser.Keyboard.UP.isDown && this.body.onFloor()) {
+    // this.body.velocity.y = -250;
+    // jumpTimer = game.time.now + 750;
+  // }
+
 };
+
 
 module.exports = Player;
