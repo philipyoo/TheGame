@@ -15,7 +15,7 @@ window.onload = function () {
 
   game.state.start('boot');
 };
-},{"./states/boot":5,"./states/gameover":6,"./states/menu":7,"./states/play":8,"./states/preload":9}],2:[function(require,module,exports){
+},{"./states/boot":6,"./states/gameover":7,"./states/menu":8,"./states/play":9,"./states/preload":10}],2:[function(require,module,exports){
 'use strict';
 
 var bullets;
@@ -72,6 +72,50 @@ Bullet.prototype.update = function(){
 },{}],3:[function(require,module,exports){
 'use strict';
 
+var explosions;
+
+var Explosion = function(game, x, y, spritesheet) {
+  Phaser.Sprite.call(this, game, x, y, spritesheet);
+   //this.game.physics.arcade.enableBody(this);
+    this.explosions = this.game.add.group();
+
+
+    this.game.physics.arcade.enableBody(this);
+    this.explosions.physicsBodyType = Phaser.Physics.ARCADE;
+    this.explosions.enableBody = true;
+    this.body.collideWorldBounds = true;
+    //this.explosions.physicsBodyType = Phaser.Physics.ARCADE;
+
+    this.explosions.createMultiple(20, 'kaboom');
+    //this.explosions.setAll('anchor.x', -0.5);
+    // this.explosions.setAll('checkWorldBounds', true);
+    // this.explosions.setAll('outOfBoundsKill', true);
+
+    // this.body.collideWorldBounds = true;
+};
+
+Explosion.prototype = Object.create(Phaser.Sprite.prototype);
+Explosion.prototype.constructor = Explosion;
+
+Explosion.prototype.update = function(){
+
+      var explosion = this.explosions.getFirstExists(false);
+      //explosion.reset(500, 500);
+     // console.log(this.explosion.play('explosion', 30, true, false));
+     //console.log(explosion.play)
+      explosion.play('kaboom', 10, true, false);
+        // var explosion = this.explosions.getFirstDead(false);
+
+        // explosion.reset(500, 500  );
+
+
+  }
+
+  module.exports = Explosion;
+
+},{}],4:[function(require,module,exports){
+'use strict';
+
 var Ground = function(game, x, y, width, height) {
   Phaser.TileSprite.call(this, game, x, y, width, height, 'ground');
 
@@ -98,7 +142,7 @@ Ground.prototype.update = function() {
 
 module.exports = Ground;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 var cursors;
@@ -163,7 +207,7 @@ Player.prototype.update = function() {
 
 module.exports = Player;
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 
 'use strict';
 
@@ -206,7 +250,7 @@ Boot.prototype = {
 
 module.exports = Boot;
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 
 'use strict';
 function GameOver() {}
@@ -234,7 +278,7 @@ GameOver.prototype = {
 };
 module.exports = GameOver;
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 
 'use strict';
 
@@ -299,7 +343,7 @@ Menu.prototype = {
 
 module.exports = Menu;
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 
   'use strict';
 
@@ -307,12 +351,14 @@ module.exports = Menu;
   var Ground = require('../prefabs/ground');
   var Player = require('../prefabs/player');
   var Bullet = require('../prefabs/bullet');
+  var Explosion = require('../prefabs/explosion');
   var cursors;
 
   function Play() {}
   Play.prototype = {
     create: function() {
-      this.game.physics.startSystem(Phaser.Physics.ARCADE);
+
+      this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
 
       this.game.physics.arcade.gravity.y = 500;
 
@@ -339,6 +385,20 @@ module.exports = Menu;
 
       this.game.camera.follow(this.player1);
 
+
+       this.explosion = new Explosion(this.game, 0, 0, 'kaboom');
+      // this.ground = new Ground(this.game, 0, 700, 2000, 112);
+      // this.game.add.existing(this.ground);
+      //flame = this.game.add.sprite(300, 200, 'kaboom');
+      console.log(this.game.add.sprite(0,0,'kaboom'));
+      this.flame = this.game.add.sprite(0, 0, 'kaboom');
+      this.flame.scale.setTo(1.5, 1.5);
+      //console.log(flame.animations);
+         // sprite: function (x, y, key, frame, group) {
+
+      this.blow = this.flame.animations.add('blow');
+
+
     },
     update: function() {
 
@@ -349,11 +409,19 @@ module.exports = Menu;
     },
 
 
-
-
     collisionHandler: function(bullet, opponent){
       bullet.kill();
       opponent.kill()
+      // console.log(opponent.x)
+      // console.log(opponent.body.x)
+     // explosion = this.game.add.sprite(opponent.x, opponent.y, 'explosion')
+     //console.log(explosion)
+     //var explosion = this.explosion.explosions.getFirstExists(false);
+      this.flame.reset(opponent.body.x, opponent.body.y-100);
+      console.log(this.flame.animations.play);
+      this.flame.animations.play('blow', 30, false, true);
+     //console.log(explosion.play)
+     // explosion.play('explosion', 30, true, false);
     },
 
     clickListener: function() {
@@ -365,7 +433,7 @@ module.exports = Menu;
 
   module.exports = Play;
 
-},{"../prefabs/bullet":2,"../prefabs/ground":3,"../prefabs/player":4}],9:[function(require,module,exports){
+},{"../prefabs/bullet":2,"../prefabs/explosion":3,"../prefabs/ground":4,"../prefabs/player":5}],10:[function(require,module,exports){
 
 'use strict';
 function Preload() {
@@ -388,7 +456,8 @@ Preload.prototype = {
     this.load.image('ground', 'assets/images/ground.png');
     this.load.spritesheet('bullet', 'assets/images/bird.png', 34, 24, 1);
     this.load.image('yeoman', 'assets/yeoman-logo.png')
-
+    this.load.spritesheet('kaboom', 'assets/images/explode.png', 128, 128);
+    this.load.spritesheet('explosion', 'assets/images/explosion1.png', 200, 141, 11);
     this.load.spritesheet('player', 'assets/images/running100x141.png', 100, 141, 6);
 
     // this.load.tilemap('level1', 'assets/tilemaps/testmap.json', null, Phaser.Tilemap.TILED_JSON);
