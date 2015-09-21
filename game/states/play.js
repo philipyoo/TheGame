@@ -30,12 +30,12 @@
       this.game.add.existing(this.player1);
       this.game.add.existing(this.player2);
 
-      this.ground = new Ground(this.game, 0, 1322, 4000, 214);
-      this.game.add.existing(this.ground);
+      // this.ground = new Ground(this.game, 0, 1322, 4000, 214);
+      // this.game.add.existing(this.ground);
 
-      //add platforms
-      this.platform1 = new Platform(this.game, 100, 1200, 400, 32);
-      this.game.add.existing(this.platform1);
+      // //add platforms
+      // this.platform1 = new Platform(this.game, 100, 1200, 400, 32);
+      // this.game.add.existing(this.platform1);
 
 
       this.game.camera.follow(this.player1);

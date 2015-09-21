@@ -220,12 +220,12 @@ Player.prototype.update = function() {
   this.game.physics.arcade.gravity.y = 1000;
 
   cursors = this.game.input.keyboard.createCursorKeys();
-  var jumpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.UP);
+  //var jumpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.UP);
   // keyUp = game.input.keyboard.addKey(Phaser.Keyboard.UP);
   // cursors = this.game.input.keyboard.addKey(Phaser.Keyboard)
   // jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.UP);
   this.body.velocity.x = 0;
-  this.body.velocity.y = 0;
+  //this.body.velocity.y = 0;
 
   if (cursors.left.isDown) {
     this.body.velocity.x = -750;
@@ -236,14 +236,14 @@ Player.prototype.update = function() {
     this.scale.x = 0.5;
     this.body.velocity.x = 750;
     this.animations.play('right');
-  // } else {
-  //   this.animations.stop();
-  //   this.frame = 0;
+  } else {
+    this.animations.stop();
+    this.frame = 0;
   }
 
-  if (jumpKey.isDown) {
-    this.body.velocity.y = -200;
-  }
+  // if (jumpKey.isDown) {
+  //   this.body.velocity.y = -200;
+  // }
 
   // if (cursors.up.isDown && this.body.touching.down){
   //   // console.log(this);
@@ -430,12 +430,12 @@ module.exports = Menu;
       this.game.add.existing(this.player1);
       this.game.add.existing(this.player2);
 
-      this.ground = new Ground(this.game, 0, 1322, 4000, 214);
-      this.game.add.existing(this.ground);
+      // this.ground = new Ground(this.game, 0, 1322, 4000, 214);
+      // this.game.add.existing(this.ground);
 
-      //add platforms
-      this.platform1 = new Platform(this.game, 100, 1200, 400, 32);
-      this.game.add.existing(this.platform1);
+      // //add platforms
+      // this.platform1 = new Platform(this.game, 100, 1200, 400, 32);
+      // this.game.add.existing(this.platform1);
 
 
       this.game.camera.follow(this.player1);
