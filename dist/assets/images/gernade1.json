@@ -1,0 +1,92 @@
+{"frames": [
+
+{
+	"filename": "Grenade__000.png",
+	"frame": {"x":157,"y":2,"w":75,"h":84},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":27,"y":16,"w":75,"h":84},
+	"sourceSize": {"w":121,"h":124}
+},
+{
+	"filename": "Grenade__001.png",
+	"frame": {"x":485,"y":2,"w":84,"h":82},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":22,"y":17,"w":84,"h":82},
+	"sourceSize": {"w":121,"h":124}
+},
+{
+	"filename": "Grenade__002.png",
+	"frame": {"x":660,"y":2,"w":86,"h":71},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":21,"y":29,"w":86,"h":71},
+	"sourceSize": {"w":121,"h":124}
+},
+{
+	"filename": "Grenade__003.png",
+	"frame": {"x":397,"y":2,"w":86,"h":82},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":22,"y":24,"w":86,"h":82},
+	"sourceSize": {"w":121,"h":124}
+},
+{
+	"filename": "Grenade__004.png",
+	"frame": {"x":2,"y":2,"w":75,"h":88},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":25,"y":23,"w":75,"h":88},
+	"sourceSize": {"w":121,"h":124}
+},
+{
+	"filename": "Grenade__005.png",
+	"frame": {"x":234,"y":2,"w":75,"h":84},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":19,"y":24,"w":75,"h":84},
+	"sourceSize": {"w":121,"h":124}
+},
+{
+	"filename": "Grenade__006.png",
+	"frame": {"x":311,"y":2,"w":84,"h":83},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":15,"y":25,"w":84,"h":83},
+	"sourceSize": {"w":121,"h":124}
+},
+{
+	"filename": "Grenade__007.png",
+	"frame": {"x":748,"y":2,"w":87,"h":69},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":13,"y":26,"w":87,"h":69},
+	"sourceSize": {"w":121,"h":124}
+},
+{
+	"filename": "Grenade__008.png",
+	"frame": {"x":571,"y":2,"w":87,"h":80},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":12,"y":19,"w":87,"h":80},
+	"sourceSize": {"w":121,"h":124}
+},
+{
+	"filename": "Grenade__009.png",
+	"frame": {"x":79,"y":2,"w":76,"h":87},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":20,"y":14,"w":76,"h":87},
+	"sourceSize": {"w":121,"h":124}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "gernade1.png",
+	"format": "RGBA8888",
+	"size": {"w":837,"h":92},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:2b4d04f96f5047e248483f954bf157fe:ec65e737715072f0eb9e170d75a1d7e1:d06f8ea227401f5be291ba2309a02f80$"
+}
+}
